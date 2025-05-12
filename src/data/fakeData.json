@@ -1,0 +1,10 @@
+{
+  "players": [
+    { "id": "1", "name": "Gautam Dogra", "rating": 4.5 },
+    { "id": "2", "name": "Serena Williams", "rating": 5.0 }
+  ],
+  "matches": [
+    { "id": "1", "player1": "Gautam Dogra", "player2": "Serena Williams", "date": "2024-06-01" }
+  ]
+}
+

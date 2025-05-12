@@ -1,0 +1,35 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { createClient } from '@/utils/supabase/client';
+
+export default function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const router = useRouter();
+  const supabase = createClient();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      const { data } = await supabase.auth.getUser();
+      if (!data?.user) {
+        router.push('/login');
+      } else {
+        setLoading(false);
+      }
+    };
+
+    checkAuth();
+  }, [router, supabase]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-lg font-semibold">Loading...</div>
+      </div>
+    );
+  }
+
+  return <>{children}</>;
+}
+

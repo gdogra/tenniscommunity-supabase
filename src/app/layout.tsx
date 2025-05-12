@@ -1,11 +1,24 @@
-import { AuthProvider } from '@/hooks/useAuth';
 import './globals.css';
+import { AuthProvider } from '@/context/AuthContext';
+import { Toaster } from 'react-hot-toast';
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export const metadata = {
+  title: 'Tennis Community',
+  description: 'Connect and play!',
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="en">
       <body>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <Toaster position="top-center" />
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

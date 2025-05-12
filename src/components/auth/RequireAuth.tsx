@@ -1,27 +1,21 @@
-'use client';
+"use client"
 
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/hooks/useAuth';
-import { useEffect } from 'react';
+import { useAuth } from '@/hooks/useAuth'
+import { useRouter } from 'next/navigation'
+import { useEffect } from 'react'
 
-interface RequireAuthProps {
-  children: React.ReactNode;
-}
-
-export default function RequireAuth({ children }: RequireAuthProps) {
-  const { user, loading } = useAuth();
-  const router = useRouter();
+export function RequireAdmin({ children }: { children: React.ReactNode }) {
+  const { user } = useAuth()
+  const router = useRouter()
 
   useEffect(() => {
-    if (!loading && !user) {
-      router.push('/login');
+    if (!user || user.role !== 'admin') {
+      router.replace('/unauthorized')
     }
-  }, [user, loading, router]);
+  }, [user, router])
 
-  if (loading || (!user && typeof window !== 'undefined')) {
-    return <div className="p-6 text-center">Loading...</div>;
-  }
+  if (!user || user.role !== 'admin') return null
 
-  return <>{children}</>;
+  return <>{children}</>
 }
 
