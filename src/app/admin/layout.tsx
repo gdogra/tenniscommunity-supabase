@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import AdminGuard from '@/components/auth/AdminGuard'; // NEW component
+import AdminGuard from '@/components/auth/AdminGuard';
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
   return (
