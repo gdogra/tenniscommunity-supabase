@@ -1,65 +1,46 @@
+// src/app/admin/analytics/page.tsx
 'use client';
 
 import { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabase';
-import { useAuth } from '@/hooks/useAuth';
+import { createClient } from '@/utils/supabase/client';
+import { useUser } from '@/hooks/useUser';
 
-export default function AdminAnalyticsPage() {
-  const { user } = useAuth();
-  const [userCount, setUserCount] = useState(0);
-  const [matchCount, setMatchCount] = useState(0);
-  const [challengeCount, setChallengeCount] = useState(0);
-  const [loading, setLoading] = useState(false);
+interface AdminUser {
+  id: string;
+  email: string;
+  is_admin: boolean;
+}
+
+export default function AnalyticsPage() {
+  const supabase = createClient();
+  const { user } = useUser();
+  const [analytics, setAnalytics] = useState<any>(null);
 
   useEffect(() => {
-    if (!user?.is_admin) return;
+    if (!user) return;
+    if (!('is_admin' in user)) return; // ✅ Safely check if is_admin exists
+
+    const fetchAnalytics = async () => {
+      const { data, error } = await supabase.from('analytics').select('*');
+      if (error) {
+        console.error('Error fetching analytics:', error);
+      } else {
+        setAnalytics(data);
+      }
+    };
+
     fetchAnalytics();
-  }, [user]);
+  }, [user, supabase]);
 
-  const fetchAnalytics = async () => {
-    setLoading(true);
-
-    const { count: users, error: userError } = await supabase
-      .from('users')
-      .select('*', { count: 'exact', head: true });
-
-    const { count: matches, error: matchError } = await supabase
-      .from('matches')
-      .select('*', { count: 'exact', head: true });
-
-    const { count: challenges, error: challengeError } = await supabase
-      .from('challenges')
-      .select('*', { count: 'exact', head: true });
-
-    if (!userError) setUserCount(users || 0);
-    if (!matchError) setMatchCount(matches || 0);
-    if (!challengeError) setChallengeCount(challenges || 0);
-
-    setLoading(false);
-  };
-
-  if (!user) return <p>Loading...</p>;
+  if (!user) return <div>Loading...</div>;
 
   return (
-    <div className="p-6 space-y-6">
-      <h1 className="text-3xl font-bold mb-6">📈 Admin Analytics</h1>
-      {loading ? (
-        <p>Loading stats...</p>
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-4">Admin Analytics</h1>
+      {analytics ? (
+        <pre className="bg-gray-100 p-4 rounded">{JSON.stringify(analytics, null, 2)}</pre>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-6 bg-white rounded-lg shadow-md">
-            <h2 className="text-xl font-semibold mb-2">Users</h2>
-            <p className="text-3xl font-bold">{userCount}</p>
-          </div>
-          <div className="p-6 bg-white rounded-lg shadow-md">
-            <h2 className="text-xl font-semibold mb-2">Matches</h2>
-            <p className="text-3xl font-bold">{matchCount}</p>
-          </div>
-          <div className="p-6 bg-white rounded-lg shadow-md">
-            <h2 className="text-xl font-semibold mb-2">Challenges</h2>
-            <p className="text-3xl font-bold">{challengeCount}</p>
-          </div>
-        </div>
+        <p>Loading analytics...</p>
       )}
     </div>
   );
