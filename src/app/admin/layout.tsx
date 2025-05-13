@@ -10,7 +10,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const router = useRouter();
 
   useEffect(() => {
-    if (user && !user.is_admin) {
+    if (user && !user.user_metadata?.is_admin) {
       router.push('/unauthorized');
     }
   }, [user, router]);
@@ -19,7 +19,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     return <div className="p-6">Loading...</div>;
   }
 
-  if (!user.is_admin) {
+  if (!user.user_metadata?.is_admin) {
     return null;
   }
 
