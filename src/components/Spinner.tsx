@@ -2,8 +2,8 @@
 
 export default function Spinner() {
   return (
-    <div className="flex justify-center items-center h-40">
-      <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent border-solid rounded-full animate-spin"></div>
+    <div className="flex items-center justify-center h-full w-full py-20">
+      <div className="h-12 w-12 animate-spin rounded-full border-4 border-blue-500 border-t-transparent" />
     </div>
   );
 }
