@@ -1,14 +1,13 @@
-// src/app/admin/analytics/page.tsx
 'use client';
 
 import { useEffect, useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
-import { useUser } from '@/hooks/useUser';
+import useUser from '@/hooks/useUser'; // ✅ no curly braces!
 
 interface AdminUser {
   id: string;
   email: string;
-  is_admin: boolean;
+  is_admin?: boolean;
 }
 
 export default function AnalyticsPage() {
@@ -18,7 +17,7 @@ export default function AnalyticsPage() {
 
   useEffect(() => {
     if (!user) return;
-    if (!('is_admin' in user)) return; // ✅ Safely check if is_admin exists
+    if (!('is_admin' in user)) return;
 
     const fetchAnalytics = async () => {
       const { data, error } = await supabase.from('analytics').select('*');
