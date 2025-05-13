@@ -1,33 +1,12 @@
-'use client';
+import { AppUser } from '@/types/app'; // <-- import it!
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useAuth } from '@/hooks/useAuth';
-import { Navbar } from '@/components/admin/Navbar';
+const { user } = useUser(); // Assuming useUser gives you 'User | null'
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const { user } = useAuth();
-  const router = useRouter();
+const appUser = user as AppUser;
 
-  useEffect(() => {
-    if (user && !user?["user_metadata"]?.is_admin) {
-      router.push('/unauthorized');
-    }
-  }, [user, router]);
-
-  if (!user) {
-    return <div className="p-6">Loading...</div>;
+useEffect(() => {
+  if (appUser && !appUser.user_metadata?.is_admin) {
+    router.push('/unauthorized');
   }
-
-  if (!user?["user_metadata"]?.is_admin) {
-    return null;
-  }
-
-  return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar />
-      <main className="p-6">{children}</main>
-    </div>
-  );
-}
+}, [appUser, router]);
 
