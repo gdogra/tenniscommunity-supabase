@@ -2,44 +2,33 @@
 
 import { useEffect, useState } from 'react';
 import { createClient } from '@/utils/supabase/client';
-import useUser from '@/hooks/useUser'; // ✅ no curly braces!
-
-interface AdminUser {
-  id: string;
-  email: string;
-  is_admin?: boolean;
-}
+import useUser from '@/hooks/useUser';
 
 export default function AnalyticsPage() {
   const supabase = createClient();
-  const { user } = useUser();
+  const user = useUser(); // <-- FIXED (no { user })
+
   const [analytics, setAnalytics] = useState<any>(null);
 
   useEffect(() => {
-    if (!user) return;
-    if (!('is_admin' in user)) return;
+    if (!user?.is_admin) return;
 
     const fetchAnalytics = async () => {
       const { data, error } = await supabase.from('analytics').select('*');
-      if (error) {
-        console.error('Error fetching analytics:', error);
-      } else {
-        setAnalytics(data);
-      }
+      if (error) console.error(error);
+      else setAnalytics(data);
     };
 
     fetchAnalytics();
   }, [user, supabase]);
 
-  if (!user) return <div>Loading...</div>;
-
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Admin Analytics</h1>
+    <div>
+      <h1>Analytics</h1>
       {analytics ? (
-        <pre className="bg-gray-100 p-4 rounded">{JSON.stringify(analytics, null, 2)}</pre>
+        <pre>{JSON.stringify(analytics, null, 2)}</pre>
       ) : (
-        <p>Loading analytics...</p>
+        <p>Loading...</p>
       )}
     </div>
   );
