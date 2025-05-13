@@ -1,12 +1,11 @@
-import { AppUser } from '@/types/app'; // <-- import it!
+import { ReactNode } from 'react';
+import AdminGuard from '@/components/auth/AdminGuard'; // NEW component
 
-const { user } = useUser(); // Assuming useUser gives you 'User | null'
-
-const appUser = user as AppUser;
-
-useEffect(() => {
-  if (appUser && !appUser.user_metadata?.is_admin) {
-    router.push('/unauthorized');
-  }
-}, [appUser, router]);
+export default function AdminLayout({ children }: { children: ReactNode }) {
+  return (
+    <AdminGuard>
+      {children}
+    </AdminGuard>
+  );
+}
 
