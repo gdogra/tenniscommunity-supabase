@@ -31,7 +31,7 @@ export default function EditContentPage() {
     else router.push('/admin/content');
   };
 
-  if (!user?.is_admin) return <p>Access Denied</p>;
+  if (!(user as any)?.is_admin) return <p>Access Denied</p>;
 
   return (
     <div className="p-6">

@@ -12,7 +12,7 @@ export default function ChallengesPage() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (!user?.is_admin) return;
+    if (!(user as any)?.is_admin) return;
 
     const fetchChallenges = async () => {
       setLoading(true);

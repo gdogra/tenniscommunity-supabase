@@ -11,7 +11,7 @@ export default function AnalyticsPage() {
   const [analytics, setAnalytics] = useState<any>(null);
 
   useEffect(() => {
-    if (!user?.is_admin) return;
+    if (!(user as any)?.is_admin) return;
 
     const fetchAnalytics = async () => {
       const { data, error } = await supabase.from('analytics').select('*');

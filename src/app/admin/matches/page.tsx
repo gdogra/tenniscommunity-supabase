@@ -33,7 +33,7 @@ export default function MatchesAdminPage() {
     else setMatches(matches.filter((match) => match.id !== id));
   };
 
-  if (!user?.is_admin) return <p>Access Denied</p>;
+  if (!(user as any)?.is_admin) return <p>Access Denied</p>;
 
   return (
     <div className="p-6">

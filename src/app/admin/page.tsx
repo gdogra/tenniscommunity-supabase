@@ -6,7 +6,7 @@ import { useAuth } from '@/hooks/useAuth';
 export default function AdminPage() {
   const { user } = useAuth();
 
-  if (!user?.is_admin) {
+  if (!(user as any)?.is_admin) {
     return (
       <Layout>
         <h1 className="text-2xl font-bold text-red-600">Access Denied</h1>

@@ -32,7 +32,7 @@ export default function ContentAdminPage() {
     else setContents(contents.filter((c) => c.id !== id));
   };
 
-  if (!user?.is_admin) return <p>Access Denied</p>;
+  if (!(user as any)?.is_admin) return <p>Access Denied</p>;
 
   return (
     <div className="p-6">

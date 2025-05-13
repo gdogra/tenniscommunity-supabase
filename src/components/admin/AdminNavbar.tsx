@@ -6,7 +6,7 @@ import { useAuth } from '@/hooks/useAuth';
 export default function AdminNavbar() {
   const { user } = useAuth();
 
-  if (!user?.is_admin) return null;
+  if (!(user as any)?.is_admin) return null;
 
   return (
     <nav className="p-4 bg-gray-900 text-white space-x-4">

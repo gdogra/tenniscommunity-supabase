@@ -12,6 +12,7 @@
     "test:unit:watch": "vitest",
     "test:e2e": "playwright test",
     "test:e2e:watch": "playwright test --ui",
+    "fix-admin": "bash scripts/fix-admin.sh",
     "e2e:report": "npx playwright show-report"
   },
   "dependencies": {
